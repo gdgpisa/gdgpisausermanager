@@ -3,9 +3,9 @@ Welcome to the Google Developer Group Pisa bot. This bot is written in *python* 
 
 The bot will be available on Telegram.
 
-Feel free to fork this repo! Contributions are really appreciated. Please have a look at the [Contributing Guidelines](.github/CONTRIBUTING.md) or at the [TODO](#contributing-) list down there. You can easily start having a look at our [Issues](https://github.com/domenicoblanco/gdgpisausemanager.github.io/issues).
+Feel free to fork this repo! Contributions are really appreciated. Please have a look at the [Contributing Guidelines](.github/CONTRIBUTING.md) or at the [TODO](#contributing-) list down there. You can easily start having a look at our [Issues](https://github.com/gdgpisa/gdgpisausemanager.github.io/issues).
 
-**Don't know where to start?** 🤔 have a look at our [**help wanted**](https://github.com/domenicoblanco/gdgpisausermanager.github.io/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) or [**good first issue**](https://github.com/domenicoblanco/gdgpisausermanager.github.io/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) tickets.
+**Don't know where to start?** 🤔 have a look at our [**help wanted**](https://github.com/gdgpisa/gdgpisausermanager.github.io/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) or [**good first issue**](https://github.com/gdgpisa/gdgpisausermanager.github.io/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) tickets.
 
 ## Getting Started 🛠
 
@@ -40,7 +40,7 @@ python setup.py install
 
 5. Use the ```/newbot``` command to create a new bot. The BotFather will ask you for a name and username, then generate an authorization token for your new bot.
 
-6. Copy the token and paste it on the variable **TOKEN** inside the [python script](https://github.com/domenicoblanco/gdgpisausermanager.github.io/gdgpisausermanager.py)
+6. Copy the token and paste it on the variable **TOKEN** inside the [python script](https://github.com/gdgpisa/gdgpisausermanager.github.io/gdgpisausermanager.py)
 
 7. Run
 ```
@@ -51,7 +51,7 @@ python gdgpisausermanager.py
 
 Feel free to contribute to this project! You can have a look at our [Contribution guidelines](.github/CONTRIBUTING.md) if you don't know how to proceed.
 
-Feel free to [open a issue](https://github.com/domenicoblanco/gdgpisausermanager.github.io/issues/new) or [submit a new pull request](https://github.com/domenicoblanco/gdgpisausermanager.github.io/pulls) ❤️
+Feel free to [open a issue](https://github.com/gdgpisa/gdgpisausermanager.github.io/issues/new) or [submit a new pull request](https://github.com/gdgpisa/gdgpisausermanager.github.io/pulls) ❤️
 
 Here a short TODO list:
 
