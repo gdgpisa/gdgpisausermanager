@@ -60,7 +60,7 @@ Here a short TODO list:
 - [ ] Writing Windows setup steps to this Readme.
 - [ ] Fix all issues
 - [ ] Complete a stress test
-- [ ] Clean-up the code folder.
+- [ ] Clean-up the code
 
 ## License 📄
 
