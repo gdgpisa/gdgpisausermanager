@@ -1,1 +1,6 @@
 config.py
+__pycache__
+.idea/
+.vscode/
+venv/
+.gitignore
