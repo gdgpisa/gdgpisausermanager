@@ -40,7 +40,7 @@ python setup.py install
 
 5. Use the ```/newbot``` command to create a new bot. The BotFather will ask you for a name and username, then generate an authorization token for your new bot.
 
-6. Copy the token and paste it on the variable **TOKEN** inside the [python script](https://github.com/gdgpisa/gdgpisausermanager/blob/master/gdgpisausermanager.py)
+6. Copy the token and paste it on the variable **TOKEN** inside the [python script](https://github.com/gdgpisa/gdgpisausermanager/blob/master/config.py#L2)
 
 7. Run
 ```
