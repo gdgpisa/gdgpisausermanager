@@ -47,9 +47,12 @@ def welcome(bot, update):
 
 
 def button_pressed(bot, update):
+    global new_users
+
     if update.callback_query.from_user.id in new_users:
+
         new_users.remove(update.callback_query.from_user.id)
-        bot.deleteMessage(update.callback_query.message.chat_id, update.callback_query.from_user.id)
+        bot.deleteMessage(update.callback_query.message.chat_id, update.callback_query.message.message_id)
 
         try:
             user = "@" + update.callback_query.from_user.username
@@ -57,7 +60,7 @@ def button_pressed(bot, update):
             user = update.callback_query.from_user.first_name
 
         bot.send_message(update.callback_query.message.chat_id,
-                         text=str(user) + ", grazie per aver completato la registrazione!")
+                         text=user + ", grazie per aver completato la registrazione!")
 
 
 def check_activity(bot, update):
