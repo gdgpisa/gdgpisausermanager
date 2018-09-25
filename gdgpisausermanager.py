@@ -21,11 +21,11 @@ def welcome(bot, update):
     for new_user_obj in update.message.new_chat_members:
         try:
             new_user = "@" + new_user_obj['username']
-            reply_text = "Benvenut* <a href=\"t.me/{}\">{}</a> in <b>{}</b>! Premi <i>Confermo</i> per dimostrare di non essere un bot." \
+            reply_text = "Benvenut*"+new_user+"! Premi <i>Confermo</i> per dimostrare di non essere un bot." \
                 .format(new_user_obj.username, new_user, update.message.chat.title)
         except Exception as _:
             new_user = new_user_obj['first_name']
-            reply_text = "Benvenut* {} in <b>{}</b>! Premi <i>Confermo</i> per dimostrare di non essere un bot." \
+            reply_text = "Benvenut*"+new_user+"! Premi <i>Confermo</i> per dimostrare di non essere un bot." \
                 .format(new_user, update.message.chat.title)
         logger.info("Nuovo utente: {}".format(new_user))
 
