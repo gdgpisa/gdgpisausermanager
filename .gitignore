@@ -1,5 +1,8 @@
-__pycache__
+*.egg
+*.egg-info/
+*.pyc
 .idea/
-.vscode/
-venv/
 .telegram.token
+.vscode/
+__pycache__
+venv/

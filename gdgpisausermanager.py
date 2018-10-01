@@ -3,10 +3,12 @@ from __future__ import unicode_literals
 
 import logging
 import threading
+from sys import maxsize
 
 from telegram import InlineKeyboardButton
 from telegram import InlineKeyboardMarkup
 from telegram import ParseMode
+from telegram.error import NetworkError
 from telegram.ext import CallbackQueryHandler
 from telegram.ext import CommandHandler
 from telegram.ext import Filters
@@ -31,17 +33,14 @@ def welcome(bot, update):
     :type bot: telegram.Bot
     :type update: telegram.Update
     """
-    for new_user_obj in update.message.new_chat_members:
-        try:
-            new_user = "@{}".format(new_user_obj['username'])
-            # TODO: is format really needed?
-            reply_text = "Benvenut*"+new_user+"! Premi <i>Confermo</i> per dimostrare di non essere un bot." \
-                .format(new_user_obj.username, new_user, update.message.chat.title)
-        except Exception as _:
-            new_user = "@{}".format(new_user_obj['first_name'])
-            # TODO: is format really needed?
-            reply_text = "Benvenut*"+new_user+"! Premi <i>Confermo</i> per dimostrare di non essere un bot." \
-                .format(new_user, update.message.chat.title)
+    for new_user_obj in update.message.new_chat_members:  # new_user_obj has telegram.user.User type
+        user_handle = new_user_obj.name
+        user_id = new_user_obj.id
+        chat_id = update.message.chat_id
+
+        reply_text = "Benvenuto/a {}! Premi <i>Confermo</i> per dimostrare di non essere un bot.".format(
+            user_handle,
+        )
 
         new_users.append(new_user_obj.id)
 
@@ -58,10 +57,10 @@ def welcome(bot, update):
         threading.Timer(
             interval=Config.WAITING_TIMEOUT,
             function=timer,
-            args=[bot, new_user_obj.id, update.message.chat_id, message.message_id],
-        ).start()
+            args=[bot, user_id, chat_id, message.message_id],
+        ).start()  # TODO: keep track of the timer to cancel it if the user confirmed it's identity
 
-        logger.info("Nuovo utente: {}.".format(new_user))
+        logger.info("Nuovo utente: {}.".format(user_handle))
 
 
 def button_pressed(bot, update):
@@ -70,23 +69,20 @@ def button_pressed(bot, update):
     :type update: telegram.Update
     """
     global new_users
-
     if update.callback_query.from_user.id in new_users:
+        user_handle = update.callback_query.from_user.name
+        chat_id = update.callback_query.message.chat_id
+        message_id = update.callback_query.message.message_id
 
         new_users.remove(update.callback_query.from_user.id)
-        bot.delete_message(update.callback_query.message.chat_id, update.callback_query.message.message_id)
-
-        try:
-            user = "@{}".format(update.callback_query.from_user.username)
-        except Exception as _:
-            user = update.callback_query.from_user.first_name
+        bot.delete_message(chat_id, message_id=message_id)
 
         bot.send_message(
-            chat_id=update.callback_query.message.chat_id,
-            text="{user}, grazie per aver completato la registrazione!".format(user=user),
+            chat_id,
+            text="{}: grazie per aver completato la registrazione!".format(user_handle),
         )
 
-        logger.info("Utente confermato: {}.".format(user))
+        logger.info("Utente confermato: {}.".format(user_handle))
 
 
 def check_activity(bot, update):
@@ -107,7 +103,10 @@ def is_admin(bot, user_id, chat_id):
     :type user_id: str or int
     :type chat_id: str or int
     """
-    return any(user_id == admin.user.id for admin in bot.get_chat_administrators(chat_id))
+    try:
+        return any(user_id == admin.user.id for admin in bot.get_chat_administrators(chat_id))
+    except NetworkError:
+        return False
 
 
 def ban_user(bot, update):
@@ -118,18 +117,20 @@ def ban_user(bot, update):
     if update.message.reply_to_message is None:
         return
 
-    if is_admin(bot, update.message.from_user.id, update.message.chat.id):
-        if not is_admin(bot, update.message.reply_to_message.from_user.id, update.message.chat.id):
-            reply_text = "{} è stato bannato con successo.".format(update.message.reply_to_message.from_user.username)
-            bot.kick_chat_member(update.message.chat.id, update.message.reply_to_message.from_user.id)
-            bot.send_message(update.message.chat.id, text=reply_text)
+    chat_id = update.message.chat.id
 
-            try:
-                user = "@{}".format(update.message.reply_to_message.from_user.username)
-            except Exception as _:
-                user = update.message.reply_to_message.from_user.first_name
+    if is_admin(bot, user_id=update.message.from_user.id, chat_id=chat_id):
+        user_id = update.message.reply_to_message.from_user.id
+        user_handle = update.message.reply_to_message.from_user.name
 
-            logger.info("The user {} was banned with success".format(user))
+        if not is_admin(bot, user_id, chat_id):
+            bot.kick_chat_member(chat_id, user_id)
+            bot.send_message(
+                chat_id,
+                text="{} è stato bannato con successo.".format(user_handle),
+            )
+
+            logger.info("Utente {} bannato con successo.".format(user_handle))
 
 
 def kick_user(bot, update):
@@ -137,20 +138,22 @@ def kick_user(bot, update):
     :type bot: telegram.Bot
     :type update: telegram.Update
     """
+    # FIXME: not clear what is the difference with respect to ban_user
+
     if update.message.reply_to_message is None:
         return
 
-    if is_admin(bot, update.message.from_user.id, update.message.chat.id):
-        if not is_admin(bot, update.message.reply_to_message.from_user.id, update.message.chat.id):
-            bot.kick_chat_member(update.message.chat.id, update.message.reply_to_message.from_user.id)
-            bot.unban_chat_member(update.message.chat.id, update.message.reply_to_message.from_user.id)
+    chat_id = update.message.chat.id
 
-            try:
-                user = "@{}".format(update.message.reply_to_message.from_user.username)
-            except Exception as _:
-                user = update.message.reply_to_message.from_user.first_name
+    if is_admin(bot, user_id=update.message.from_user.id, chat_id=chat_id):
+        user_id = update.message.reply_to_message.from_user.id
+        user_handle = update.message.reply_to_message.from_user.name
 
-            logger.info("The user {} was kicked with success".format(user))
+        if is_admin(bot, user_id, chat_id):
+            bot.kick_chat_member(chat_id, user_id)
+            bot.unban_chat_member(chat_id, user_id)
+
+            logger.info("The user {} was kicked with success.".format(user_handle))
 
 
 def main():
@@ -179,8 +182,8 @@ def timer(bot, user_id, chat_id, message_id):
     global new_users
     if user_id in new_users:
         logger.info("User with id: {} auto-removed with success".format(user_id))
-        bot.kick_chat_member(chat_id=chat_id, user_id=user_id, until_date=25)
-        bot.delete_message(chat_id=chat_id, message_id=message_id)
+        bot.kick_chat_member(chat_id, user_id, until_date=maxsize)  # Kicking a member for over 365 days is forever
+        bot.delete_message(chat_id, message_id=message_id)
     return
 
 
