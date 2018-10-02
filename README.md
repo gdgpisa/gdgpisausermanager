@@ -14,7 +14,7 @@ To get starting developing, we really recommend to clone the bot locally and sta
 ### Linux
 1. Install [Python 2.7](https://www.python.org/) with your package manager.
 ```
-Debian
+# Debian
 sudo apt install python-2.7
 ```
 
@@ -24,27 +24,22 @@ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python get-pip.py
 ```
 
-3. Install [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot)
+3. Install [gdg-pisa-user-manager](https://github.com/gdgpisa/gdgpisausermanager)
 ```
-Debian
-pip install python-telegram-bot --upgrade
-```
-Or you can install from source with
-```
-git clone https://github.com/python-telegram-bot/python-telegram-bot --recursive
-cd python-telegram-bot
-python setup.py install
+pip install git+https://github.com/gdgpisa/gdgpisausermanager --upgrade
+# If the command above fails, try with
+pip install https://github.com/gdgpisa/gdgpisausermanager/archive/master.zip --upgrade
 ```
 
 4. Start a chat with [BotFather](https://t.me/BotFather)
 
 5. Use the ```/newbot``` command to create a new bot. The BotFather will ask you for a name and username, then generate an authorization token for your new bot.
 
-6. Copy the token and paste it on the variable **TOKEN** inside the [python script](https://github.com/gdgpisa/gdgpisausermanager/blob/master/config.py#L2)
+6. Copy the token into `.telegram.token` file. The content will be read by [`Config.TOKEN`](https://github.com/gdgpisa/gdgpisausermanager/blob/master/config.py#L7)
 
 7. Run
 ```
-python gdgpisausermanager.py
+gdg-pisa-user-manager
 ```
 
 ## Contributing 🤝

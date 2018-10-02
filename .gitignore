@@ -1,6 +1,8 @@
-config.py
-__pycache__
+*.egg
+*.egg-info/
+*.pyc
 .idea/
+.telegram.token
 .vscode/
+__pycache__
 venv/
-.gitignore
