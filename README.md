@@ -11,18 +11,15 @@ Feel free to fork this repo! Contributions are really appreciated. Please have a
 
 To get starting developing, we really recommend to clone the bot locally and start developing on your machine. 
 
-### Linux
-1. Install [Python 2.7](https://www.python.org/) with your package manager.
-```
-# Debian
-sudo apt install python-2.7
-```
+1. Install [Python 3.7](https://www.python.org/) with your package manager.
+- Debian: `sudo apt install python-3.7`
+- Ubuntu: `sudo apt-get install python-3.7`
+- Windows: [download from website](https://www.python.org/downloads/)
+- MacOS: `//TODO. Hint: using brew or from website`
 
 2. Install [pip](https://pip.pypa.io/en/stable/installing/)
-```
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-python get-pip.py
-```
+- Debian/Ubuntu/MacOS: `curl https://bootstrap.pypa.io/get-pip.py | sudo python -` (you may need to use `python3` instead of `python`)
+- Windows: python comes already with pip installed, just update it with `python -m pip install --upgrade pip`
 
 3. Install [gdg-pisa-user-manager](https://github.com/gdgpisa/gdgpisausermanager)
 ```
@@ -42,6 +39,7 @@ pip install https://github.com/gdgpisa/gdgpisausermanager/archive/master.zip --u
 gdg-pisa-user-manager
 ```
 
+
 ## Contributing 🤝
 
 Feel free to contribute to this project! You can have a look at our [Contribution guidelines](.github/CONTRIBUTING.md) if you don't know how to proceed.
@@ -52,7 +50,7 @@ Here a short TODO list:
 
 - [ ] Update this README with better instructions and a better English.
 - [ ] Writing macOS setup steps to this Readme.
-- [ ] Writing Windows setup steps to this Readme.
+- [x] Writing Windows setup steps to this Readme.
 - [ ] Fix all issues
 - [ ] Complete a stress test
 - [ ] Clean-up the code
