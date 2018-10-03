@@ -58,7 +58,7 @@ def welcome(bot, update):
             interval=Config.WAITING_TIMEOUT,
             function=timer,
             args=[bot, user_id, chat_id, message.message_id],
-        ).start()  # TODO: keep track of the timer to cancel it if the user confirmed it's identity
+        ).start()
 
         logger.info("Nuovo utente: {}.".format(user_handle))
 
@@ -68,7 +68,6 @@ def button_pressed(bot, update):
     :type bot: telegram.Bot
     :type update: telegram.Update
     """
-    global new_users
     if update.callback_query.from_user.id in new_users:
         user_handle = update.callback_query.from_user.name
         chat_id = update.callback_query.message.chat_id
@@ -138,8 +137,6 @@ def kick_user(bot, update):
     :type bot: telegram.Bot
     :type update: telegram.Update
     """
-    # FIXME: not clear what is the difference with respect to ban_user
-
     if update.message.reply_to_message is None:
         return
 
@@ -179,12 +176,10 @@ def timer(bot, user_id, chat_id, message_id):
     :type chat_id: str or int
     :type message_id: str or int
     """
-    global new_users
     if user_id in new_users:
         logger.info("User with id: {} auto-removed with success".format(user_id))
         bot.kick_chat_member(chat_id, user_id, until_date=maxsize)  # Kicking a member for over 365 days is forever
         bot.delete_message(chat_id, message_id=message_id)
-    return
 
 
 if __name__ == '__main__':
