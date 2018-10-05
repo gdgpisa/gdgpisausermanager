@@ -178,6 +178,7 @@ def timer(bot, user_id, chat_id, message_id):
     """
     if user_id in new_users:
         logger.info("User with id: {} auto-removed with success".format(user_id))
+        new_users.remove(user_id) 
         bot.kick_chat_member(chat_id, user_id, until_date=maxsize)  # Kicking a member for over 365 days is forever
         bot.delete_message(chat_id, message_id=message_id)
 
