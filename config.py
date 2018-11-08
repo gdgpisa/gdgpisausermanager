@@ -5,8 +5,9 @@ import os
 class _Config(object):
     @property
     def TOKEN(self):
+        telegram_token_path = os.environ.get('TELEGRAM_TOKEN_PATH') or '.telegram.token'
         try:
-            with open('.telegram.token') as f:
+            with open(telegram_token_path) as f:
                 return ''.join(f.readlines()).strip()
         except:
             raise RuntimeError(
