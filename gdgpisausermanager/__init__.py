@@ -15,7 +15,7 @@ from telegram.ext import Filters
 from telegram.ext import MessageHandler
 from telegram.ext import Updater
 
-from config import Config
+from gdgpisausermanager.config import Config
 
 
 logging.basicConfig(

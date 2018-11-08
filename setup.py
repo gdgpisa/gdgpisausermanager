@@ -3,7 +3,9 @@
 # Copyright (c) 2011-2018, Yelp, Inc.
 import os
 
+from setuptools import find_packages
 from setuptools import setup
+
 
 setup(
     name='gdg-pisa-user-manager',
@@ -14,7 +16,7 @@ setup(
     author='GDG Pise',
     author_email='TODO',
     url='https://github.com/gdgpisa/gdgpisausermanager/',
-    py_modules=['gdgpisausermanager'],
+    packages=find_packages(exclude=["tests", "tests.*"]),
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
