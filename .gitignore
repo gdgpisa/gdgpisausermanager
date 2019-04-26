@@ -1,8 +1,19 @@
+# MacOS
+.DS_Store
+
+# IDE
+.idea
+.iml
+.vscode
+
+# Python
 *.egg
-*.egg-info/
+*.egg-info
 *.pyc
-.idea/
-.telegram.token
-.vscode/
 __pycache__
-venv/
+build
+dist
+venv
+
+# Secrets
+.telegram.token
