@@ -8,14 +8,14 @@ from sys import maxsize
 from telegram import InlineKeyboardButton
 from telegram import InlineKeyboardMarkup
 from telegram import ParseMode
-from telegram.error import NetworkError
+from telegram.error import NetworkError, BadRequest
 from telegram.ext import CallbackQueryHandler
 from telegram.ext import CommandHandler
 from telegram.ext import Filters
 from telegram.ext import MessageHandler
 from telegram.ext import Updater
 
-from config import Config
+from gdgpisausermanager.config import Config
 
 
 logging.basicConfig(
@@ -38,13 +38,17 @@ def welcome(bot, update):
         user_id = new_user_obj.id
         chat_id = update.message.chat_id
 
-        reply_text = "Benvenuto/a {}! Premi <i>Confermo</i> per dimostrare di non essere un bot.".format(
-            user_handle,
-        )
+        if (user_id == bot.id):
+            bot.send_message(
+                chat_id = update.message.chat_id,
+                text = "🤖 Hi folks!\nI'll kick out all the fake users that don't press my button.\nKeep chat and do not spam! 🤟\n\nRemember to promote me to administrator.")
+            return
+        
+        reply_text = "Welcome " + user_handle + "! Press <i>Confirm</i> to prove you are not a bot."
 
         new_users.append(new_user_obj.id)
 
-        keyboard = [[InlineKeyboardButton("Confermo", callback_data=1)]]
+        keyboard = [[InlineKeyboardButton("Confirm", callback_data=1)]]
         reply_markup = InlineKeyboardMarkup(keyboard)
 
         message = bot.send_message(
@@ -60,7 +64,7 @@ def welcome(bot, update):
             args=[bot, user_id, chat_id, message.message_id],
         ).start()
 
-        logger.info("Nuovo utente: {}.".format(user_handle))
+        logger.debug("New user: " + user_handle)
 
 
 def button_pressed(bot, update):
@@ -78,10 +82,10 @@ def button_pressed(bot, update):
 
         bot.send_message(
             chat_id,
-            text="{}: grazie per aver completato la registrazione!".format(user_handle),
+            text = "Please welcome " + user_handle + "! 🎉\nThank you for completing the captcha."
         )
 
-        logger.info("Utente confermato: {}.".format(user_handle))
+        logger.debug("Confirmed user: " + user_handle)
 
 
 def check_activity(bot, update):
@@ -126,10 +130,10 @@ def ban_user(bot, update):
             bot.kick_chat_member(chat_id, user_id)
             bot.send_message(
                 chat_id,
-                text="{} è stato bannato con successo.".format(user_handle),
+                text = user_handle + "banned."
             )
 
-            logger.info("Utente {} bannato con successo.".format(user_handle))
+            logger.info("Banned user: " + user_handle)
 
 
 def kick_user(bot, update):
@@ -166,7 +170,7 @@ def main():
     try:
         updater.idle()
     except KeyboardInterrupt:
-        print("Chiusura programma")
+        print("KeyboardInterrupt: shutting down the bot...")
 
 
 def timer(bot, user_id, chat_id, message_id):
@@ -178,9 +182,15 @@ def timer(bot, user_id, chat_id, message_id):
     """
     if user_id in new_users:
         logger.info("User with id: {} auto-removed with success".format(user_id))
-        new_users.remove(user_id) 
-        bot.kick_chat_member(chat_id, user_id, until_date=maxsize)  # Kicking a member for over 365 days is forever
-        bot.delete_message(chat_id, message_id=message_id)
+        new_users.remove(user_id)
+        try:
+            bot.kick_chat_member(chat_id, user_id, until_date=maxsize)  # Kicking a member for over 365 days is forever
+            bot.delete_message(chat_id, message_id=message_id)
+        except BadRequest:
+            bot.send_message(
+                chat_id,
+                text = "You need to promote me as an administrator to kick out users. I need permissions to ban users and delete messages."
+            )
 
 
 if __name__ == '__main__':
