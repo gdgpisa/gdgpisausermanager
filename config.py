@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
-import os
+from os import environ, path
 
 
 class _Config(object):
     @property
     def TOKEN(self):
+        env_token = environ.get('TELEGRAM_TOKEN')
+        if env_token is not None:
+            return env_token
         try:
             with open('.telegram.token') as f:
                 return ''.join(f.readlines()).strip()
@@ -12,7 +15,7 @@ class _Config(object):
             raise RuntimeError(
                 'Telegram token not set. Please make sure that you followed the instructions on README and that you '
                 'have created the token file in `{}` and that is readable from the current user'.format(
-                    os.path.join(os.path.abspath('.'), '.telegram.token')
+                    path.join(path.abspath('.'), '.telegram.token')
                 ),
             )
 
