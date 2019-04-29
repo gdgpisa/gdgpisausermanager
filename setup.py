@@ -9,7 +9,7 @@ setup(
     version='1.0.0',
     license='MIT License',
     description='Bot for managing the Telegram group of GDG Pisa',
-    long_description=open(os.path.join(os.path.dirname(__file__), 'README.md')).read(),
+    long_description=open(os.path.join(os.path.dirname(__file__), 'README.md'), encoding="utf8").read(),
     author='GDG Pisa',
     author_email='pisagdg@gmail.com',
     url='https://github.com/gdgpisa/gdgpisausermanager/',
