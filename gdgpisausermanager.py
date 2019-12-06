@@ -27,16 +27,18 @@ logger = logging.getLogger(__name__)
 
 new_users = []
 
-
 def welcome(bot, update):
     """
     :type bot: telegram.Bot
-    :type update: telegram.Update
+    :type update: telegram.Updater
     """
     for new_user_obj in update.message.new_chat_members:  # new_user_obj has telegram.user.User type
         user_handle = new_user_obj.name
         user_id = new_user_obj.id
         chat_id = update.message.chat_id
+
+        if Config.DELETE_JOIN:
+            bot.delete_message(chat_id, message_id=update.message.message_id)
 
         reply_text = "Benvenuto/a {}! Premi <i>Confermo</i> per dimostrare di non essere un bot.".format(
             user_handle,
@@ -61,6 +63,11 @@ def welcome(bot, update):
         ).start()
 
         logger.info("Nuovo utente: {}.".format(user_handle))
+
+
+def goodbye(bot, update):
+    if Config.DELETE_JOIN:
+        bot.delete_message(update.message.chat_id, message_id=update.message.message_id)
 
 
 def button_pressed(bot, update):
@@ -156,6 +163,7 @@ def kick_user(bot, update):
 def main():
     updater = Updater(Config.TOKEN)
     updater.dispatcher.add_handler(MessageHandler(Filters.status_update.new_chat_members, welcome))
+    updater.dispatcher.add_handler(MessageHandler(Filters.status_update.left_chat_member, goodbye))
     updater.dispatcher.add_handler(MessageHandler(Filters.regex('^ping$'), check_activity))
     updater.dispatcher.add_handler(CallbackQueryHandler(button_pressed))
     updater.dispatcher.add_handler(CommandHandler('ban', ban_user))

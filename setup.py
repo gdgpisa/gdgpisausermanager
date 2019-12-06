@@ -10,8 +10,8 @@ setup(
     license='MIT License',
     description='Bot for managing the Telegram group of GDG Pisa',
     long_description=open(os.path.join(os.path.dirname(__file__), 'README.md')).read(),
-    author='GDG Pise',
-    author_email='TODO',
+    author='GDG Pisa',
+    author_email='pisagdg@gmail.com',
     url='https://github.com/gdgpisa/gdgpisausermanager/',
     py_modules=['gdgpisausermanager'],
     classifiers=[

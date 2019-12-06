@@ -16,7 +16,8 @@ class _Config(object):
                 ),
             )
 
-    WAITING_TIMEOUT = 30.0
+    WAITING_TIMEOUT = 60.0
+    DELETE_JOIN = True
 
 
 Config = _Config()
