@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-
 from setuptools import setup
+from setuptools import find_packages
 
 setup(
     name='gdg-pisa-user-manager',
@@ -13,21 +13,17 @@ setup(
     author='GDG Pisa',
     author_email='pisagdg@gmail.com',
     url='https://github.com/gdgpisa/gdgpisausermanager/',
+    packages=find_packages(exclude=["tests", "tests.*"]),
     py_modules=['gdgpisausermanager'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Topic :: Communications :: Chat',
-        'Topic :: Internet',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
-    install_requires=['python-telegram-bot'],
+    install_requires=['python-telegram-bot<=12.8'],
     entry_points={'console_scripts': ['gdg-pisa-user-manager = gdgpisausermanager:main']},
 )
